@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웨어(Waste-AI-Recognition) - 대형 폐기물 신고 서비스</title>
+    <link type="text/css" rel="stylesheet" href="jquery.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="jquery.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>웨어</h1>
+                <span>Waste-AI-Recognition</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#main" class="nav-link">홈</a></li>
+                    <li><a href="#report" class="nav-link">폐기물 신고</a></li>
+                    <li><a href="#mypage" class="nav-link">마이페이지</a></li>
+                    <li><a href="#admin" class="nav-link">관리자</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main id="content">
+        <!-- 메인 랜딩 페이지 -->
+        <section id="main" class="page active">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h2>사진 한 장으로 끝내는 대형 폐기물 신고</h2>
+                    <p>AI가 자동으로 폐기물을 인식하고 요금을 계산해드립니다</p>
+                    <button class="cta-button" onclick="showPage('report'); resetReportFlow();">바로 신고하기</button>
+                </div>
+                <div class="hero-image">
+                    <div class="phone-mockup">
+                        <div class="camera-icon">📸</div>
+                        <p>스마트폰으로 간편하게</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="how-to-use">
+                <h3>이용 방법</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-icon">📷</div>
+                        <h4>1. 사진 찍기</h4>
+                        <p>폐기물 사진을 찍거나 업로드해요</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">🤖</div>
+                        <h4>2. AI 분석</h4>
+                        <p>AI가 폐기물을 인식하고 요금을 계산해요</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">💳</div>
+                        <h4>3. 결제하기</h4>
+                        <p>간편하게 결제하고 신고 번호를 받아요</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 폐기물 신고 페이지 -->
+        <section id="report" class="page">
+            <div class="report-container">
+                <h2>폐기물 신고</h2>
+                
+                <!-- 1단계: 사진 업로드 -->
+                <div class="step-section" id="step1">
+                    <h3>1단계: 사진 업로드</h3>
+                    <p class="step-description">버리실 폐기물 사진을 등록해주세요.</p>
+                    
+                    <div class="upload-options">
+                        <button class="upload-btn camera-btn">
+                            <span class="btn-icon">📸</span>
+                            카메라로 촬영하기
+                        </button>
+                        <button class="upload-btn gallery-btn">
+                            <span class="btn-icon">🏞️</span>
+                            갤러리에서 선택하기
+                        </button>
+                        <input type="file" id="imageInput" accept="image/*" style="display:none">
+                    </div>
+                    
+                    <div class="upload-tip">
+                        <p>💡 <strong>촬영 가이드라인:</strong> 폐기물 전체가 잘 보이도록 정면에서 촬영해주세요.</p>
+                    </div>
+                    
+                    <div class="uploaded-image" id="uploadedImage" style="display: none;">
+                        <img id="previewImage" src="" alt="업로드된 이미지">
+                    </div>
+                    
+                    <button class="next-btn" id="nextStep1" style="display: none;">다음 단계</button>
+                </div>
+
+                <!-- 2단계: AI 분석 결과 -->
+                <div class="step-section" id="step2" style="display: none;">
+                    <h3>2단계: AI 분석 결과 확인</h3>
+                    <div class="ai-image">
+                        <img id="aiImage" src="image2.jpg" alt="AI 분석 결과 이미지">
+                    </div>
+                    
+                    <div class="ai-result">
+                        <div class="result-item">
+                            <label>인식된 품목:</label>
+                            <span id="recognizedItem">의자</span>
+                        </div>
+                        <div class="result-item">
+                            <label>예상 처리 비용:</label>
+                            <span id="estimatedCost">1,000원</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-confirmation">
+                        <p>AI 분석 결과가 정확한가요?</p>
+                        <div class="confirmation-buttons">
+                            <button class="confirm-btn yes-btn">네, 맞아요</button>
+                            <button class="confirm-btn no-btn">아니요, 직접 선택할게요</button>
+                        </div>
+                    </div>
+                    
+                    <div class="manual-selection" id="manualSelection" style="display: none;">
+                        <h4>품목을 직접 선택해주세요</h4>
+                        <select id="itemSelect">
+                            <option value="">품목을 선택하세요</option>
+                            <option value="TV">TV</option>
+                            <option value="냉장고">냉장고</option>
+                            <option value="소파">소파</option>
+                            <option value="의자">의자</option>
+                            <option value="침대">침대</option>
+                            <option value="책상">책상</option>
+                            <option value="옷장">옷장</option>
+                            <option value="세탁기">세탁기</option>
+                            <option value="에어컨">에어컨</option>
+                        </select>
+                        <div class="cost-display">
+                            <span>처리 비용: </span>
+                            <span id="manualCost">0원</span>
+                        </div>
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button class="prev-btn" onclick="showStep(1)">이전 단계</button>
+                        <button class="next-btn" id="nextStep2">다음 단계</button>
+                    </div>
+                </div>
+
+                <!-- 3단계: 배출 정보 입력 -->
+                <div class="step-section" id="step3" style="display: none;">
+                    <h3>3단계: 배출 정보 입력</h3>
+                    
+                    <div class="address-section">
+                        <h4>배출 주소</h4>
+                        <button class="gps-btn">📍 현재 위치로 주소 설정</button>
+                        <div class="address-input">
+                            <input type="text" id="addressSearch" placeholder="주소를 검색하세요">
+                            <button class="search-btn">확정</button>
+                        </div>
+                        <div class="selected-address" id="selectedAddress">
+                            <p>선택된 주소: <span id="addressDisplay">주소를 선택해주세요</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-location">
+                        <h4>상세 위치</h4>
+                        <input type="text" id="detailLocation" placeholder="예: 101동 앞 폐기물 수거장, 빌라 정문 우측">
+                    </div>
+                    
+                    <div class="disposal-date">
+                        <h4>배출 예정일</h4>
+                        <input type="date" id="disposalDate">
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button class="prev-btn" onclick="showStep(2)">이전 단계</button>
+                        <button class="next-btn" id="nextStep3">다음 단계</button>
+                    </div>
+                </div>
+
+                <!-- 4단계: 결제 및 신고 완료 -->
+                <div class="step-section" id="step4" style="display: none;">
+                    <h3>4단계: 결제 및 신고 완료</h3>
+                    
+                    <div class="final-summary">
+                        <h4>최종 확인 정보</h4>
+                        <div class="summary-item">
+                            <label>품목:</label>
+                            <span id="finalItem">의자</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>금액:</label>
+                            <span id="finalCost">1,000원</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>주소:</label>
+                            <span id="finalAddress">주소 정보</span>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <h4>결제 수단 선택</h4>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="card" checked>
+                                <span>💳 신용카드</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="kakao">
+                                <span>💛 카카오페이</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="naver">
+                                <span>🟢 네이버페이</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="payment-btn" id="finalPayment">
+                        <span id="paymentAmount">4,000원</span> 결제 및 신고하기
+                    </button>
+                    
+                    <div class="step-navigation">
+                        <button class="prev-btn" onclick="showStep(3)">이전 단계</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 마이페이지 -->
+        <section id="mypage" class="page">
+            <div class="mypage-container">
+                <h2>마이페이지</h2>
+                
+                <div class="report-history">
+                    <h3>신고 내역</h3>
+                    <div class="history-list" id="historyList">
+                        <div class="history-item">
+                            <div class="history-info">
+                                <div class="report-date">2025.08.01</div>
+                                <div class="report-item">TV</div>
+                                <div class="report-cost">6,000원</div>
+                            </div>
+                            <div class="report-status completed">수거 완료</div>
+                            <button class="view-detail-btn">상세보기</button>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-info">
+                                <div class="report-date">2025.08.28</div>
+                                <div class="report-item">의자</div>
+                                <div class="report-cost">1,000원</div>
+                            </div>
+                            <div class="report-status pending">수거 예정</div>
+                            <button class="view-detail-btn">상세보기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관리자 페이지 -->
+        <section id="admin" class="page">
+            <div class="admin-container">
+                <div class="admin-login" id="adminLogin">
+                    <h2>관리자 로그인</h2>
+                    <div class="login-form">
+                        <input type="text" id="adminId" placeholder="아이디">
+                        <input type="password" id="adminPassword" placeholder="비밀번호">
+                        <button class="login-btn" onclick="adminLogin()">로그인</button>
+                    </div>
+                </div>
+                
+                <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+                    <h2>관리자 대시보드</h2>
+                    
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <h3>오늘 접수</h3>
+                            <div class="stat-number">12건</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>수거 대기</h3>
+                            <div class="stat-number">8건</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>품목별 통계</h3>
+                            <div class="stat-chart">📊</div>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-actions">
+                        <button class="admin-btn" onclick="showOptimalRoute()">최적 경로 생성</button>
+                        <button class="admin-btn" onclick="showAllReports()">전체 신고 내역</button>
+                    </div>
+                    
+                    <div class="map-container">
+                        <div class="map-placeholder">
+                            <h3>실시간 신고 현황 맵</h3>
+                            <p>지도가 여기에 표시됩니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 신고 완료 모달 -->
+    <div class="modal" id="completionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>신고 완료!</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="receipt">
+                    <h3>신고 접수증</h3>
+                    <div class="receipt-info">
+                        <div class="receipt-item">
+                            <label>신고 번호:</label>
+                            <span id="reportNumber">20250126-001</span>
+                        </div>
+                        <div class="receipt-item">
+                            <label>품목:</label>
+                            <span id="receiptItem">의자</span>
+                        </div>
+                        <div class="receipt-item">
+                            <label>금액:</label>
+                            <span id="receiptCost">4,000원</span>
+                        </div>
+                        <div class="receipt-item">
+                            <label>배출 장소:</label>
+                            <span id="receiptAddress">주소 정보</span>
+                        </div>
+                    </div>
+                    <div class="qr-code">
+                        <div class="qr-placeholder">QR 코드</div>
+                    </div>
+                </div>
+                
+                <div class="disposal-guide">
+                    <h4>배출 안내</h4>
+                    <p>폐기물에 신고 번호 <strong id="guideNumber">20250126-001</strong>을 잘 배출해주세요.</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="modal-btn" onclick="showPage('mypage'); closeModal();">마이페이지에서 확인</button>
+                    <button class="modal-btn" onclick="showPage('main'); closeModal();">메인으로 가기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 웨어(Waste-AI-Recognition). All rights reserved.</p>
+            <p>대형 폐기물 신고 서비스</p>
+        </div>
+    </footer>
+</body>
+</html>
